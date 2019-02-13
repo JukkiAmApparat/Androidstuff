@@ -1,5 +1,6 @@
 package com.example.pc.myfirstapp;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
@@ -18,6 +19,8 @@ import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
 
+    public static final String EXTRA_MESSAGE = "Hello";
+
     public String removeHtmlTags(String inputLine)
     {
         return Html.fromHtml(inputLine).toString().trim();
@@ -26,6 +29,10 @@ public class MainActivity extends AppCompatActivity {
     public String stocksToString(ArrayList<String[]> inputList)
     {
         String output = "";
+        String tableFormat = "|%1$-14s|%2$-14s|%3$-14s|\r\n";
+        System.out.format(tableFormat, "A", "AA", "AAA");
+
+
         for (String[] x : inputList)
         {
             /*
@@ -44,12 +51,23 @@ public class MainActivity extends AppCompatActivity {
                     x[4].substring(0,  max = (x[4].length() < StringLength) ? x[4].length()-1 : StringLength)
             ).trim()+ "\r\n";
             */
+
+            /*
             output = output +
                     (x[0].substring(0, max = (x[0].length() < StringLength) ? x[0].length()-1 : StringLength) + "\t\t\t\t\t\t" +
                     x[1].substring(0,  max = (x[1].length() < StringLength) ? x[1].length()-1 : StringLength)+ "\t\t" +
                     x[2].substring(0,  max = (x[2].length() < StringLength) ? x[2].length()-1 : StringLength)+ "\t\t" +
                     x[3].substring(0,  max = (x[3].length() < StringLength) ? x[3].length()-1 : StringLength))+ "\r\n";
                     //x[4].substring(0,  StringLength)
+            */
+            output = output + String.format(tableFormat,
+                        x[0].substring(0, max = (x[0].length() < StringLength) ? x[0].length()-1 : StringLength),
+                        x[1].substring(0,  max = (x[1].length() < StringLength) ? x[1].length()-1 : StringLength),
+                        x[2].substring(0,  max = (x[2].length() < StringLength) ? x[2].length()-1 : StringLength));
+                            //x[3].substring(0,  max = (x[3].length() < StringLength) ? x[3].length()-1 : StringLength));
+            //x[4].substring(0,  StringLength)
+
+
 
         }
         return output;
@@ -62,6 +80,20 @@ public class MainActivity extends AppCompatActivity {
 
         final TextView webTextView = (TextView) findViewById(R.id.WebTextView);
         webTextView.setMovementMethod(new ScrollingMovementMethod());
+
+        Button showResultButton = (Button) findViewById(R.id.showResultButton);
+        showResultButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v) {
+            Intent intent = new Intent(v.getContext(), ShowResultActivity.class);
+
+            EditText editText = (EditText) findViewById(R.id.FirstNumEditText);
+            String message = editText.getText().toString();
+            intent.putExtra(EXTRA_MESSAGE, message);
+            startActivity(intent);
+            }
+        });
 
         Button startButton = (Button) findViewById(R.id.StartButton);
         startButton.setOnClickListener(new View.OnClickListener() {
@@ -76,6 +108,15 @@ public class MainActivity extends AppCompatActivity {
                 mytoast.setDuration(Toast.LENGTH_LONG);
                 mytoast.show();
                 */
+                /*
+                Intent intent = new Intent(v.getContext(), ShowResultActivity.class);
+
+                EditText editText = (EditText) findViewById(R.id.FirstNumEditText);
+                String message = editText.getText().toString();
+                intent.putExtra(EXTRA_MESSAGE, message);
+                startActivity(intent);
+                */
+
                 Thread thread = new Thread(new Runnable() {
 
                     @Override

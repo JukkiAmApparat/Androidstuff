@@ -19,14 +19,12 @@
 
     <EditText
         android:id="@+id/FirstNumEditText"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:layout_width="293dp"
+        android:layout_height="43dp"
         android:layout_marginTop="63dp"
-        android:layout_marginBottom="42dp"
         android:ems="10"
         android:inputType="number"
         android:text="Name"
-        app:layout_constraintBottom_toTopOf="@+id/StartButton"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -36,12 +34,12 @@
         android:id="@+id/StartButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginTop="42dp"
-        android:layout_marginBottom="48dp"
-        android:text="Button"
-        app:layout_constraintBottom_toTopOf="@+id/ResultTextView"
+        android:layout_marginTop="23dp"
+        android:layout_marginBottom="134dp"
+        android:text="@string/stockButtonText"
+        app:layout_constraintBottom_toTopOf="@+id/WebTextView"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintHorizontal_bias="0.83"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/FirstNumEditText" />
 
@@ -61,6 +59,19 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/ResultTextView" />
+
+    <Button
+        android:id="@+id/showResultButton"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="23dp"
+        android:layout_marginBottom="134dp"
+        android:text="Result"
+        app:layout_constraintBottom_toTopOf="@+id/WebTextView"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.155"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/FirstNumEditText" />
 
 
 </android.support.constraint.ConstraintLayout>
