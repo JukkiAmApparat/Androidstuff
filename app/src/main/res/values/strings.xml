@@ -1,4 +1,4 @@
 <resources>
-    <string name="app_name">MyFirstApp</string>
+    <string name="app_name">Get Data</string>
     <string name="stockButtonText">Get Stocks</string>
 </resources>

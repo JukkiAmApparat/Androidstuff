@@ -16,6 +16,7 @@ import java.util.concurrent.Future;
 public class MainController {
 
     public static ArrayList<String[]> stockDataList;
+    public static Integer cellStringLength;
     private static MainController MainController_instance = null;
 
     public static MainController getInstance()
@@ -28,6 +29,7 @@ public class MainController {
 
     public MainController()
     {
+        cellStringLength = 12;
         stockDataList = new ArrayList<String[]>();
     }
 
@@ -52,6 +54,19 @@ public class MainController {
                     x[2].substring(0,  max = (x[2].length() < StringLength) ? x[2].length()-1 : StringLength));
         }
         return output;
+    }
+
+    public static String formatStockCell(String cellValue)
+    {
+        cellValue=cellValue.trim();
+        if (cellValue.length()>cellStringLength)
+        {
+            return cellValue.substring(0,cellStringLength);
+        }
+        else
+        {
+            return cellValue;
+        }
     }
 
     public ArrayList<String[]> readStockData(String webpageUrl) throws InterruptedException, ExecutionException
