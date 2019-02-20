@@ -6,8 +6,9 @@ import android.support.v7.app.AppCompatActivity;
 import android.text.Html;
 import android.text.method.ScrollingMovementMethod;
 import android.view.View;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.EditText;
+import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
 
@@ -52,16 +53,19 @@ public class MainActivity extends AppCompatActivity {
         final TextView webTextView = (TextView) findViewById(R.id.WebTextView);
         webTextView.setMovementMethod(new ScrollingMovementMethod());
 
+        Spinner sourceSelectionSpinner = (Spinner) findViewById(R.id.SourceSelectionSpinner);
+        String[] sources = {"Finanzen", "Bundesliga", "Transfermarkt"};
+
+        ArrayAdapter<String> sourceSpinnerAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, sources);
+        sourceSpinnerAdapter.setDropDownViewResource(android.R.layout.simple_spinner_dropdown_item);
+        sourceSelectionSpinner.setAdapter(sourceSpinnerAdapter);
+
         Button showResultButton = (Button) findViewById(R.id.showResultButton);
         showResultButton.setOnClickListener(new View.OnClickListener()
         {
             @Override
             public void onClick(View v) {
             Intent intent = new Intent(v.getContext(), ShowResultActivity.class);
-
-            EditText editText = (EditText) findViewById(R.id.FirstNumEditText);
-            String message = editText.getText().toString();
-            intent.putExtra(EXTRA_MESSAGE, message);
             startActivity(intent);
             }
         });
@@ -149,12 +153,6 @@ public class MainActivity extends AppCompatActivity {
 
                 thread.start();
                 Toast.makeText(getApplicationContext(), "HMMMMMMM", Toast.LENGTH_LONG).show();
-
-                EditText firstNumEditText = (EditText) findViewById(R.id.FirstNumEditText);
-                TextView resultTextView = (TextView) findViewById(R.id.ResultTextView);
-
-                String currentText = firstNumEditText.getText().toString();
-                resultTextView.setText(currentText);
             }
         });
     }
