@@ -136,7 +136,7 @@ public class MainController {
 
         return future.get();
     }
-    public ArrayList<String[]> readSoccerData(String webpageUrl) throws InterruptedException, ExecutionException
+    public ArrayList<String[]> readSoccerData(final String webpageUrl) throws InterruptedException, ExecutionException
     {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Callable<ArrayList<String[]>> callable = new Callable<ArrayList<String[]>>() {
@@ -149,7 +149,7 @@ public class MainController {
 
                 try
                 {
-                    URL dataUrl = new URL("https://www.transfermarkt.de/1-bundesliga/tabelle/wettbewerb/L1/saison_id/2018");
+                    URL dataUrl = new URL(webpageUrl);
                     BufferedReader in = new BufferedReader(new InputStreamReader(dataUrl.openStream()));
 
                     String inputLine;
