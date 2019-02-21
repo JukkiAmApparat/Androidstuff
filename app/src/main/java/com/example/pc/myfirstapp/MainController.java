@@ -1,7 +1,6 @@
 package com.example.pc.myfirstapp;
 
 import android.text.Html;
-
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -128,6 +127,79 @@ public class MainController {
                     return null;
                 }
                 return stockList;
+            }
+        };
+
+        Future<ArrayList<String[]>> future = executor.submit(callable);
+        // future.get() returns 2 or raises an exception if the thread dies, so safer
+        executor.shutdown();
+
+        return future.get();
+    }
+    public ArrayList<String[]> readSoccerData(String webpageUrl) throws InterruptedException, ExecutionException
+    {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Callable<ArrayList<String[]>> callable = new Callable<ArrayList<String[]>>() {
+            @Override
+            public ArrayList<String[]> call() {
+
+                String fullPage="";
+                ArrayList<String[]> dataList = new ArrayList<String[]>();
+                String[] rowData = new String[8];
+
+                try
+                {
+                    URL dataUrl = new URL("https://www.transfermarkt.de/1-bundesliga/tabelle/wettbewerb/L1/saison_id/2018");
+                    BufferedReader in = new BufferedReader(new InputStreamReader(dataUrl.openStream()));
+
+                    String inputLine;
+                    boolean tableStartTrigger = false;
+                    int fieldCounter=0;
+
+                    while ((inputLine = in.readLine()) != null)
+                    {
+                        fullPage = fullPage + inputLine;
+
+                        if (inputLine.contains("<div class=\"responsive-table\">"))
+                        {
+                            tableStartTrigger=true;
+                        }
+
+                        if (tableStartTrigger)
+                        {
+                            if  (inputLine.contains("<a class") && !inputLine.contains("tiny_wappen"))
+                            {
+                                if (!removeHtmlTags(inputLine).equals("")) {
+                                    rowData[fieldCounter] = removeHtmlTags(inputLine);
+                                    fieldCounter++;
+                                }
+                            }
+                            if (inputLine.contains("<td class=\"zentriert\">") && fieldCounter>0)
+                            {
+                                rowData[fieldCounter] = removeHtmlTags(inputLine);
+                                fieldCounter++;
+                            }
+                            if (inputLine.contains("</tr>") && fieldCounter>0)
+                            {
+                                dataList.add(rowData);
+                                rowData = new String[8];
+                                fieldCounter=0;
+                            }
+                            if(inputLine.contains("</table>"))
+                            {
+                                tableStartTrigger=false;
+                                break;
+                            }
+                        }
+                    }
+                    in.close();
+                }
+                catch (IOException e)
+                {
+                    System.out.println(e.toString());
+                    return null;
+                }
+                return dataList;
             }
         };
 

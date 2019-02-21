@@ -21,7 +21,7 @@ public class testActivity extends AppCompatActivity {
 
         ArrayList<String[]> stockData = null;
         try {
-            stockData = mc.readStockData("https://www.finanzen.net/rohstoffe");
+            stockData = mc.readSoccerData("https://www.finanzen.net/rohstoffe");
         } catch (InterruptedException e) {
             e.printStackTrace();
         } catch (ExecutionException e) {
@@ -33,29 +33,43 @@ public class testActivity extends AppCompatActivity {
         table.setScrollY(table.getWidth());
         //table.getTabAt(table).select();
 
-        TableRow row = (TableRow) LayoutInflater.from(testActivity.this).inflate(R.layout.stock_row, null);
-        ((TextView)row.findViewById(R.id.stock_name_cell)).setText("Stock");
-        ((TextView)row.findViewById(R.id.stock_value_cell)).setText("Value");
-        ((TextView)row.findViewById(R.id.stock_percent_cell)).setText("Percent");
-        ((TextView)row.findViewById(R.id.stock_unit_cell)).setText("Unit");
+        TableRow row = (TableRow) LayoutInflater.from(testActivity.this).inflate(R.layout.soccer_row, null);
+        ((TextView)row.findViewById(R.id.rank_cell)).setText("Rank");
+        ((TextView)row.findViewById(R.id.club_cell)).setText("Club");
+        ((TextView)row.findViewById(R.id.games_cell)).setText("Games");
+        ((TextView)row.findViewById(R.id.win_cell)).setText("W");
+        ((TextView)row.findViewById(R.id.draw_cell)).setText("D");
+        ((TextView)row.findViewById(R.id.lost_cell)).setText("L");
+        ((TextView)row.findViewById(R.id.goals_cell)).setText("Goals");
+        ((TextView)row.findViewById(R.id.diff_cell)).setText("Diff.");
+        ((TextView)row.findViewById(R.id.points_cell)).setText("Pts.");
+
         table.addView(row);
+        int counter = 0;
 
         for(String[] stockrow : stockData)
         {
             // Inflate your row "template" and fill out the fields.
-            row = (TableRow)LayoutInflater.from(testActivity.this).inflate(R.layout.stock_row, null);
-            ((TextView)row.findViewById(R.id.stock_name_cell)).setText(mc.formatStockCell(stockrow[0]));
-            ((TextView)row.findViewById(R.id.stock_value_cell)).setText(mc.formatStockCell(stockrow[1]));
-            ((TextView)row.findViewById(R.id.stock_percent_cell)).setText(mc.formatStockCell(stockrow[2]));
-            ((TextView)row.findViewById(R.id.stock_unit_cell)).setText(mc.formatStockCell(stockrow[3]));
+            counter++;
+            row = (TableRow)LayoutInflater.from(testActivity.this).inflate(R.layout.soccer_row, null);
+            ((TextView)row.findViewById(R.id.rank_cell)).setText(counter+"");
+            ((TextView)row.findViewById(R.id.club_cell)).setText(mc.formatStockCell(stockrow[0]));
+            ((TextView)row.findViewById(R.id.games_cell)).setText(mc.formatStockCell(stockrow[1]));
+            ((TextView)row.findViewById(R.id.win_cell)).setText(mc.formatStockCell(stockrow[2]));
+            ((TextView)row.findViewById(R.id.draw_cell)).setText(mc.formatStockCell(stockrow[3]));
+            ((TextView)row.findViewById(R.id.lost_cell)).setText(mc.formatStockCell(stockrow[4]));
+            ((TextView)row.findViewById(R.id.goals_cell)).setText(mc.formatStockCell(stockrow[5]));
+            ((TextView)row.findViewById(R.id.diff_cell)).setText(mc.formatStockCell(stockrow[6]));
+            ((TextView)row.findViewById(R.id.points_cell)).setText(mc.formatStockCell(stockrow[7]));
             table.addView(row);
         }
+        /*
         row = (TableRow)LayoutInflater.from(testActivity.this).inflate(R.layout.stock_row, null);
         ((TextView)row.findViewById(R.id.stock_name_cell)).setText("Stock");
         ((TextView)row.findViewById(R.id.stock_value_cell)).setText("Value");
         ((TextView)row.findViewById(R.id.stock_percent_cell)).setText("Percent");
         ((TextView)row.findViewById(R.id.stock_unit_cell)).setText("Unit");
-        table.addView(row);
+        table.addView(row);*/
 
         table.requestLayout();
 
