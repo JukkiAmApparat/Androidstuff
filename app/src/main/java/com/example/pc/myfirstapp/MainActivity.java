@@ -10,7 +10,6 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.Spinner;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import java.io.BufferedReader;
 import java.io.IOException;
@@ -19,8 +18,6 @@ import java.net.URL;
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity {
-
-    public static final String EXTRA_MESSAGE = "Hello";
 
     public String removeHtmlTags(String inputLine)
     {
@@ -130,7 +127,6 @@ public class MainActivity extends AppCompatActivity {
                                         }
                                         if(inputLine.contains("</table>"))
                                         {
-                                            tableStartTrigger=false;
                                             break;
                                         }
                                     }
@@ -150,9 +146,7 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 });
-
                 thread.start();
-                Toast.makeText(getApplicationContext(), "HMMMMMMM", Toast.LENGTH_LONG).show();
             }
         });
     }

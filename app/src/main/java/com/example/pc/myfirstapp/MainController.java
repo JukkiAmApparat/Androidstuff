@@ -14,7 +14,6 @@ import java.util.concurrent.Future;
 
 public class MainController {
 
-    public static ArrayList<String[]> stockDataList;
     public static Integer cellStringLength;
     private static MainController MainController_instance = null;
 
@@ -29,7 +28,6 @@ public class MainController {
     public MainController()
     {
         cellStringLength = 12;
-        stockDataList = new ArrayList<String[]>();
     }
 
     public String removeHtmlTags(String inputLine)
@@ -37,23 +35,6 @@ public class MainController {
         return Html.fromHtml(inputLine).toString().trim();
     }
 
-    public String stocksToString(ArrayList<String[]> inputList)
-    {
-        String output = "";
-        String tableFormat = "|%1$-14s|%2$-14s|%3$-14s|\r\n";
-
-        for (String[] x : inputList)
-        {
-            int max=0;
-            int StringLength=12;
-
-            output = output + String.format(tableFormat,
-                    x[0].substring(0, max = (x[0].length() < StringLength) ? x[0].length()-1 : StringLength),
-                    x[1].substring(0,  max = (x[1].length() < StringLength) ? x[1].length()-1 : StringLength),
-                    x[2].substring(0,  max = (x[2].length() < StringLength) ? x[2].length()-1 : StringLength));
-        }
-        return output;
-    }
 
     public static String formatStockCell(String cellValue)
     {
@@ -75,7 +56,6 @@ public class MainController {
             @Override
             public ArrayList<String[]> call() {
 
-                String fullPage="";
                 ArrayList<String[]> stockList = new ArrayList<String[]>();
                 String[] stockData = new String[5];
 
@@ -90,7 +70,6 @@ public class MainController {
 
                     while ((inputLine = in.readLine()) != null)
                     {
-                        fullPage = fullPage + inputLine;
 
                         if (inputLine.contains("<table id=\"commodity_prices\" class=\"table\">"))
                         {
@@ -114,7 +93,6 @@ public class MainController {
                             }
                             if(inputLine.contains("</table>"))
                             {
-                                tableStartTrigger=false;
                                 break;
                             }
                         }
@@ -131,7 +109,6 @@ public class MainController {
         };
 
         Future<ArrayList<String[]>> future = executor.submit(callable);
-        // future.get() returns 2 or raises an exception if the thread dies, so safer
         executor.shutdown();
 
         return future.get();
@@ -143,7 +120,6 @@ public class MainController {
             @Override
             public ArrayList<String[]> call() {
 
-                String fullPage="";
                 ArrayList<String[]> dataList = new ArrayList<String[]>();
                 String[] rowData = new String[8];
 
@@ -158,7 +134,6 @@ public class MainController {
 
                     while ((inputLine = in.readLine()) != null)
                     {
-                        fullPage = fullPage + inputLine;
 
                         if (inputLine.contains("<div class=\"responsive-table\">"))
                         {
@@ -187,7 +162,6 @@ public class MainController {
                             }
                             if(inputLine.contains("</table>"))
                             {
-                                tableStartTrigger=false;
                                 break;
                             }
                         }
@@ -202,9 +176,7 @@ public class MainController {
                 return dataList;
             }
         };
-
         Future<ArrayList<String[]>> future = executor.submit(callable);
-        // future.get() returns 2 or raises an exception if the thread dies, so safer
         executor.shutdown();
 
         return future.get();
