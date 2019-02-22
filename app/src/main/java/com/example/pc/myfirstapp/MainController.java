@@ -68,8 +68,14 @@ public class MainController {
                     boolean tableStartTrigger = false;
                     int fieldCounter=0;
 
+
+
                     while ((inputLine = in.readLine()) != null)
                     {
+                        //Rohstofftable: "<table id=\"commodity_prices\" class=\"table\">")
+                        //Aktien Tables: <div class="table-quotes">
+                        //Devisentable: <h2 class="box-headline">Devisentabelle</h2>
+
 
                         if (inputLine.contains("<table id=\"commodity_prices\" class=\"table\">"))
                         {
