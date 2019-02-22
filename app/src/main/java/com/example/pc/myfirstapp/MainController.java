@@ -49,7 +49,7 @@ public class MainController {
         }
     }
 
-    public ArrayList<String[]> readStockData(String webpageUrl) throws InterruptedException, ExecutionException
+    public ArrayList<String[]> readStockData(final String webpageUrl) throws InterruptedException, ExecutionException
     {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Callable<ArrayList<String[]>> callable = new Callable<ArrayList<String[]>>() {
@@ -57,49 +57,120 @@ public class MainController {
             public ArrayList<String[]> call() {
 
                 ArrayList<String[]> stockList = new ArrayList<String[]>();
-                String[] stockData = new String[5];
+                String[] stockData = null;
+
+                String inputLine;
+                boolean tableStarted = false;
+                boolean cellStartTrigger=false;
+                int fieldCounter=0;
+                String lineBuffer = "";
+
+                String tableStartTrigger="";
+                String rowStartTrigger="";
+                String rowEndTrigger="";
+                String tableEndTrigger="";
 
                 try
                 {
-                    URL financeUrl = new URL("https://www.finanzen.net/rohstoffe");
+                    URL financeUrl = new URL(webpageUrl);
                     BufferedReader in = new BufferedReader(new InputStreamReader(financeUrl.openStream()));
 
-                    String inputLine;
-                    boolean tableStartTrigger = false;
-                    int fieldCounter=0;
 
 
+                    if (!webpageUrl.toLowerCase().contains("rohstoffe"))
+                    {
+                        stockData = new String[20];
+                        tableStartTrigger="<div class=\"table-quotes\">";
+                        rowStartTrigger="<tr>";
+                        rowEndTrigger="</tr>";
+                        tableEndTrigger="</table>";
+                    }
 
+                    if (webpageUrl.toLowerCase().contains("rohstoffe"))
+                    {
+                        stockData = new String[5];
+                        tableStartTrigger="<table id=\"commodity_prices\" class=\"table\">";
+                        rowStartTrigger="<td class";
+                        rowEndTrigger="</tr>";
+                        tableEndTrigger="</table>";
+
+                    }
+                    String currentLine = "";
                     while ((inputLine = in.readLine()) != null)
                     {
+                        currentLine= inputLine;
                         //Rohstofftable: "<table id=\"commodity_prices\" class=\"table\">")
                         //Aktien Tables: <div class="table-quotes">
                         //Devisentable: <h2 class="box-headline">Devisentabelle</h2>
-
-
-                        if (inputLine.contains("<table id=\"commodity_prices\" class=\"table\">"))
+                        if (webpageUrl.toLowerCase().contains("rohstoffe"))
                         {
-                            tableStartTrigger=true;
-                        }
-
-                        if (tableStartTrigger)
-                        {
-                            if  (inputLine.contains("<td class"))
+                            if (inputLine.contains(tableStartTrigger))
                             {
-                                if (!removeHtmlTags(inputLine).equals("")) {
-                                    stockData[fieldCounter] = removeHtmlTags(inputLine);
-                                    fieldCounter++;
+                                tableStarted=true;
+                            }
+
+                            if (tableStarted)
+                            {
+                                if  (inputLine.contains(rowStartTrigger))
+                                {
+                                    if (!removeHtmlTags(inputLine).equals("")) {
+                                        stockData[fieldCounter] = removeHtmlTags(inputLine);
+                                        fieldCounter++;
+                                    }
+                                }
+                                if (inputLine.contains(rowEndTrigger) && fieldCounter>0)
+                                {
+                                    stockList.add(stockData);
+                                    stockData = new String[5];
+                                    fieldCounter=0;
+                                }
+                                if(inputLine.contains(tableEndTrigger))
+                                {
+                                    break;
                                 }
                             }
-                            if (inputLine.contains("</tr>") && fieldCounter>0)
+                        }
+
+                        if (!webpageUrl.toLowerCase().contains("rohstoffe"))
+                        {
+                            if (inputLine.contains(tableStartTrigger))
                             {
-                                stockList.add(stockData);
-                                stockData = new String[5];
-                                fieldCounter=0;
+                                tableStarted=true;
                             }
-                            if(inputLine.contains("</table>"))
+
+                            if (tableStarted)
                             {
-                                break;
+
+                                if (inputLine.contains("<td >"))
+                                {
+                                    cellStartTrigger=true;
+                                }
+
+                                if (cellStartTrigger)
+                                {
+                                    lineBuffer=lineBuffer+inputLine;
+                                }
+
+                                if (inputLine.contains("</td>"))
+                                {
+                                    stockData[fieldCounter] = removeHtmlTags(lineBuffer);
+                                    fieldCounter++;
+                                    lineBuffer="";
+                                    cellStartTrigger=false;
+                                }
+
+                                if (inputLine.contains(rowEndTrigger) && fieldCounter>0)
+                                {
+                                    stockList.add(stockData);
+                                    stockData = new String[20];
+                                    fieldCounter=0;
+                                    lineBuffer="";
+                                    cellStartTrigger=false;
+                                }
+                                if(inputLine.contains(tableEndTrigger))
+                                {
+                                    break;
+                                }
                             }
                         }
                     }
