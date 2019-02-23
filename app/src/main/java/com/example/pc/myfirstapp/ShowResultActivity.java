@@ -18,11 +18,12 @@ import java.util.concurrent.ExecutionException;
 
 public class ShowResultActivity extends AppCompatActivity {
 
-    public final String[] finSources = {"Rohstoffe", "Devisen", "DAX", "Dow Jones", "Nikkei", "S&P 500", "Nasdaq 100", "TECDAX", "MDAX"};
+    public final String[] finSources = {"Rohstoffe", "Devisen", "DAX", "SMI", "Dow Jones", "Nikkei", "S&P 500", "Nasdaq 100", "TECDAX", "MDAX"};
     public final String[] finUrls = {
             "https://www.finanzen.net/rohstoffe",
             "https://www.finanzen.net/devisen",
             "https://www.finanzen.net/index/dax/30-werte",
+            "https://www.finanzen.net/index/smi/werte",
             "https://www.finanzen.net/index/dow_jones/werte",
             "https://www.finanzen.net/index/nikkei_225/werte",
             "https://www.finanzen.net/index/s&p_500/werte",
