@@ -15,6 +15,7 @@ import java.util.concurrent.Future;
 public class MainController {
 
     public static Integer cellStringLength;
+    public static String multiPageURL;
     private static MainController MainController_instance = null;
 
     public static MainController getInstance()
@@ -28,6 +29,7 @@ public class MainController {
     public MainController()
     {
         cellStringLength = 12;
+        multiPageURL = "?p="; // dann page nummer dahinter
     }
 
     public String removeHtmlTags(String inputLine)
@@ -74,9 +76,7 @@ public class MainController {
                 {
                     URL financeUrl = new URL(webpageUrl);
                     BufferedReader in = new BufferedReader(new InputStreamReader(financeUrl.openStream()));
-
-
-
+                    
                     if (!webpageUrl.toLowerCase().contains("rohstoffe"))
                     {
                         stockData = new String[20];
@@ -99,9 +99,6 @@ public class MainController {
                     while ((inputLine = in.readLine()) != null)
                     {
                         currentLine= inputLine;
-                        //Rohstofftable: "<table id=\"commodity_prices\" class=\"table\">")
-                        //Aktien Tables: <div class="table-quotes">
-                        //Devisentable: <h2 class="box-headline">Devisentabelle</h2>
                         if (webpageUrl.toLowerCase().contains("rohstoffe"))
                         {
                             if (inputLine.contains(tableStartTrigger))

@@ -1,5 +1,7 @@
 package com.example.pc.myfirstapp;
 
+import android.graphics.Color;
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -28,22 +30,13 @@ public class ShowResultActivity extends AppCompatActivity {
             "https://www.finanzen.net/index/tecdax/werte",
             "https://www.finanzen.net/index/mdax/werte"
     };
-    public final String multiPageURL = "?p="; // dann page nummer dahinter
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_show_result);
 
-        MainController mc = MainController.getInstance();
-        ArrayList<String[]> stockData = null;
-        try {
-            stockData = mc.readStockData("https://www.finanzen.net/rohstoffe");
-        } catch (InterruptedException e) {
-            e.printStackTrace();
-        } catch (ExecutionException e) {
-            e.printStackTrace();
-        }
 
         Spinner finSourceSpinner = (Spinner) findViewById(R.id.finScourceSpinner);
         ArrayAdapter<String> sourceSpinnerAdapter = new ArrayAdapter<String>(this, android.R.layout.simple_list_item_1, finSources);
@@ -70,14 +63,23 @@ public class ShowResultActivity extends AppCompatActivity {
                     TableLayout table = (TableLayout)ShowResultActivity.this.findViewById(R.id.stockTable);
                     table.removeAllViews();
                     TableRow row = (TableRow) LayoutInflater.from(ShowResultActivity.this).inflate(R.layout.stock_row7, null);
-                    ((TextView)row.findViewById(R.id.stock7_name_cell)).setText("Name \n ISIN)");
-                    ((TextView)row.findViewById(R.id.stock7_last_cell)).setText("Last \n Prev");
-                    ((TextView)row.findViewById(R.id.stock7_low_cell)).setText("Low \n High");
-                    ((TextView)row.findViewById(R.id.stock7_plus_cell)).setText("+\n -");
-                    ((TextView)row.findViewById(R.id.stock7_time_cell)).setText("Time \n Date");
-                    ((TextView)row.findViewById(R.id.stock7_plus3m_cell)).setText("+/-3M \n %3M");
-                    ((TextView)row.findViewById(R.id.stock7_plus6m_cell)).setText("+/-6M \n %6M");
-                    ((TextView)row.findViewById(R.id.stock7_plus1y_cell)).setText("+/-1Y \n %1Y");
+                    ((TextView)row.findViewById(R.id.stock7_name_cell)).setText("Name\nISIN)");
+                    ((TextView)row.findViewById(R.id.stock7_last_cell)).setText("Last\nPrev");
+                    ((TextView)row.findViewById(R.id.stock7_low_cell)).setText("Low\nHigh");
+                    ((TextView)row.findViewById(R.id.stock7_plus_cell)).setText("+\n-");
+                    ((TextView)row.findViewById(R.id.stock7_time_cell)).setText("Time\nDate");
+                    ((TextView)row.findViewById(R.id.stock7_plus3m_cell)).setText("+/-3M\n%3M");
+                    ((TextView)row.findViewById(R.id.stock7_plus6m_cell)).setText("+/-6M\n%6M");
+                    ((TextView)row.findViewById(R.id.stock7_plus1y_cell)).setText("+/-1Y\n%1Y");
+
+                    ((TextView)row.findViewById(R.id.stock7_name_cell)).setTypeface(null, Typeface.BOLD);
+                    ((TextView)row.findViewById(R.id.stock7_last_cell)).setTypeface(null, Typeface.BOLD);
+                    ((TextView)row.findViewById(R.id.stock7_low_cell)).setTypeface(null, Typeface.BOLD);
+                    ((TextView)row.findViewById(R.id.stock7_plus_cell)).setTypeface(null, Typeface.BOLD);
+                    ((TextView)row.findViewById(R.id.stock7_time_cell)).setTypeface(null, Typeface.BOLD);
+                    ((TextView)row.findViewById(R.id.stock7_plus3m_cell)).setTypeface(null, Typeface.BOLD);
+                    ((TextView)row.findViewById(R.id.stock7_plus6m_cell)).setTypeface(null, Typeface.BOLD);
+                    ((TextView)row.findViewById(R.id.stock7_plus1y_cell)).setTypeface(null, Typeface.BOLD);
 
                     table.addView(row);
                     int counter = 0;
@@ -86,6 +88,10 @@ public class ShowResultActivity extends AppCompatActivity {
                     {
                         counter++;
                         row = (TableRow)LayoutInflater.from(ShowResultActivity.this).inflate(R.layout.stock_row7, null);
+                        if (counter%2!=0)
+                        {
+                            row.setBackgroundColor(Color.rgb(240,248, 250));
+                        }
                         ((TextView)row.findViewById(R.id.stock7_name_cell)).setText(mc.formatStockCell(stockrow[0]));
                         ((TextView)row.findViewById(R.id.stock7_last_cell)).setText(mc.formatStockCell(stockrow[1]));
                         ((TextView)row.findViewById(R.id.stock7_low_cell)).setText(mc.formatStockCell(stockrow[2]));
@@ -104,15 +110,27 @@ public class ShowResultActivity extends AppCompatActivity {
                     TableLayout table = (TableLayout)ShowResultActivity.this.findViewById(R.id.stockTable);
                     table.removeAllViews();
                     TableRow row = (TableRow)LayoutInflater.from(ShowResultActivity.this).inflate(R.layout.stock_row, null);
+
                     ((TextView)row.findViewById(R.id.stock_name_cell)).setText("Stock");
                     ((TextView)row.findViewById(R.id.stock_value_cell)).setText("Value");
                     ((TextView)row.findViewById(R.id.stock_percent_cell)).setText("Percent");
                     ((TextView)row.findViewById(R.id.stock_unit_cell)).setText("Unit");
-                    table.addView(row);
 
+                    ((TextView)row.findViewById(R.id.stock_name_cell)).setTypeface(null, Typeface.BOLD);
+                    ((TextView)row.findViewById(R.id.stock_value_cell)).setTypeface(null, Typeface.BOLD);
+                    ((TextView)row.findViewById(R.id.stock_percent_cell)).setTypeface(null, Typeface.BOLD);
+                    ((TextView)row.findViewById(R.id.stock_unit_cell)).setTypeface(null, Typeface.BOLD);
+
+                    table.addView(row);
+                    int counter=0;
                     for(String[] stockrow : stockData)
                     {
+                        counter++;
                         row = (TableRow)LayoutInflater.from(ShowResultActivity.this).inflate(R.layout.stock_row, null);
+                        if (counter%2!=0)
+                        {
+                            row.setBackgroundColor(Color.rgb(240,248, 250));
+                        }
                         ((TextView)row.findViewById(R.id.stock_name_cell)).setText(mc.formatStockCell(stockrow[0]));
                         ((TextView)row.findViewById(R.id.stock_value_cell)).setText(mc.formatStockCell(stockrow[1]));
                         ((TextView)row.findViewById(R.id.stock_percent_cell)).setText(mc.formatStockCell(stockrow[2]));
@@ -128,25 +146,5 @@ public class ShowResultActivity extends AppCompatActivity {
 
             }
         });
-
-
-        TableLayout table = (TableLayout)ShowResultActivity.this.findViewById(R.id.stockTable);
-        TableRow row = (TableRow)LayoutInflater.from(ShowResultActivity.this).inflate(R.layout.stock_row, null);
-        ((TextView)row.findViewById(R.id.stock_name_cell)).setText("Stock");
-        ((TextView)row.findViewById(R.id.stock_value_cell)).setText("Value");
-        ((TextView)row.findViewById(R.id.stock_percent_cell)).setText("Percent");
-        ((TextView)row.findViewById(R.id.stock_unit_cell)).setText("Unit");
-        table.addView(row);
-
-        for(String[] stockrow : stockData)
-        {
-            row = (TableRow)LayoutInflater.from(ShowResultActivity.this).inflate(R.layout.stock_row, null);
-            ((TextView)row.findViewById(R.id.stock_name_cell)).setText(mc.formatStockCell(stockrow[0]));
-            ((TextView)row.findViewById(R.id.stock_value_cell)).setText(mc.formatStockCell(stockrow[1]));
-            ((TextView)row.findViewById(R.id.stock_percent_cell)).setText(mc.formatStockCell(stockrow[2]));
-            ((TextView)row.findViewById(R.id.stock_unit_cell)).setText(mc.formatStockCell(stockrow[3]));
-            table.addView(row);
-        }
-        table.requestLayout();
     }
 }

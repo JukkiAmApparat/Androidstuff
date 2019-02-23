@@ -1,5 +1,6 @@
 package com.example.pc.myfirstapp;
 
+import android.graphics.Typeface;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.view.LayoutInflater;
@@ -58,6 +59,16 @@ public class testActivity extends AppCompatActivity {
                 ((TextView)row.findViewById(R.id.goals_cell)).setText("Goals");
                 ((TextView)row.findViewById(R.id.diff_cell)).setText("Diff.");
                 ((TextView)row.findViewById(R.id.points_cell)).setText("Pts.");
+
+                ((TextView)row.findViewById(R.id.rank_cell)).setTypeface(null, Typeface.BOLD);
+                ((TextView)row.findViewById(R.id.club_cell)).setTypeface(null, Typeface.BOLD);
+                ((TextView)row.findViewById(R.id.games_cell)).setTypeface(null, Typeface.BOLD);
+                ((TextView)row.findViewById(R.id.win_cell)).setTypeface(null, Typeface.BOLD);
+                ((TextView)row.findViewById(R.id.draw_cell)).setTypeface(null, Typeface.BOLD);
+                ((TextView)row.findViewById(R.id.lost_cell)).setTypeface(null, Typeface.BOLD);
+                ((TextView)row.findViewById(R.id.goals_cell)).setTypeface(null, Typeface.BOLD);
+                ((TextView)row.findViewById(R.id.diff_cell)).setTypeface(null, Typeface.BOLD);
+                ((TextView)row.findViewById(R.id.points_cell)).setTypeface(null, Typeface.BOLD);
 
                 table.addView(row);
                 int counter = 0;
