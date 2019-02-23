@@ -1,11 +1,14 @@
 package com.example.pc.myfirstapp;
 
 import android.text.Html;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.net.URL;
 import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.HashSet;
 import java.util.concurrent.Callable;
 import java.util.concurrent.ExecutionException;
 import java.util.concurrent.ExecutorService;
@@ -16,6 +19,8 @@ public class MainController {
 
     public static Integer cellStringLength;
     public static String multiPageURL;
+    public static int duplicateCounter;
+    public static HashSet<String> entrySet;
     private static MainController MainController_instance = null;
 
     public static MainController getInstance()
@@ -29,7 +34,9 @@ public class MainController {
     public MainController()
     {
         cellStringLength = 12;
+        entrySet=new HashSet<String>();
         multiPageURL = "?p="; // dann page nummer dahinter
+        duplicateCounter = 0;
     }
 
     public String removeHtmlTags(String inputLine)
@@ -40,6 +47,11 @@ public class MainController {
 
     public static String formatStockCell(String cellValue)
     {
+        if (cellValue.contains("\n"))
+        {
+            return cellValue;
+        }
+
         cellValue=cellValue.trim();
         if (cellValue.length()>cellStringLength)
         {
@@ -51,6 +63,31 @@ public class MainController {
         }
     }
 
+    public ArrayList<String[]> readMultipageStock (final String webpageUrl) throws InterruptedException, ExecutionException
+    {
+        duplicateCounter=0;
+        entrySet.clear();
+        ArrayList<String[]> completeList = new ArrayList<String[]>();
+
+        if (webpageUrl.toLowerCase().contains("rohstoffe"))
+        {
+            return readStockData(webpageUrl);
+        }
+
+        for(int i=0; duplicateCounter<5; i++)
+        {
+            if (i==0)
+            {
+                completeList = readStockData(webpageUrl);
+            }
+            else
+            {
+                completeList.addAll(readStockData(webpageUrl+multiPageURL+(i+1)));
+            }
+        }
+        return completeList;
+    }
+
     public ArrayList<String[]> readStockData(final String webpageUrl) throws InterruptedException, ExecutionException
     {
         ExecutorService executor = Executors.newSingleThreadExecutor();
@@ -59,6 +96,8 @@ public class MainController {
             public ArrayList<String[]> call() {
 
                 ArrayList<String[]> stockList = new ArrayList<String[]>();
+
+
                 String[] stockData = null;
 
                 String inputLine;
@@ -72,11 +111,13 @@ public class MainController {
                 String rowEndTrigger="";
                 String tableEndTrigger="";
 
+
+
                 try
                 {
                     URL financeUrl = new URL(webpageUrl);
                     BufferedReader in = new BufferedReader(new InputStreamReader(financeUrl.openStream()));
-                    
+
                     if (!webpageUrl.toLowerCase().contains("rohstoffe"))
                     {
                         stockData = new String[20];
@@ -158,7 +199,17 @@ public class MainController {
 
                                 if (inputLine.contains(rowEndTrigger) && fieldCounter>0)
                                 {
-                                    stockList.add(stockData);
+
+                                    if (!entrySet.add(Arrays.toString(stockData)))
+                                    {
+                                        duplicateCounter++;
+                                    }
+
+                                    else
+                                    {
+                                        stockList.add(stockData);
+                                    }
+
                                     stockData = new String[20];
                                     fieldCounter=0;
                                     lineBuffer="";

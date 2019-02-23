@@ -50,7 +50,8 @@ public class ShowResultActivity extends AppCompatActivity {
                 MainController mc = MainController.getInstance();
                 ArrayList<String[]> stockData = null;
                 try {
-                    stockData = mc.readStockData(finUrls[position]);
+                    //stockData = mc.readStockData(finUrls[position]);
+                    stockData = mc.readMultipageStock(finUrls[position]);
                     //stockData = mc.readStockData("https://www.finanzen.net/rohstoffe");
                 } catch (InterruptedException e) {
                     e.printStackTrace();
@@ -83,6 +84,7 @@ public class ShowResultActivity extends AppCompatActivity {
 
                     table.addView(row);
                     int counter = 0;
+                    String[] stockRowTest = new String[20];
 
                     for(String[] stockrow : stockData)
                     {
