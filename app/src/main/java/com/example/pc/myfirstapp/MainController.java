@@ -307,4 +307,82 @@ public class MainController {
         return future.get();
     }
 
+    public ArrayList<String[]> readWikiData(final String webpageUrl) throws InterruptedException, ExecutionException
+    {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Callable<ArrayList<String[]>> callable = new Callable<ArrayList<String[]>>() {
+            @Override
+            public ArrayList<String[]> call() {
+
+                ArrayList<String[]> dataList = new ArrayList<String[]>();
+                String[] rowData = new String[6];
+                boolean cellStartTrigger = false;
+
+                try
+                {
+                    URL dataUrl = new URL(webpageUrl);
+                    BufferedReader in = new BufferedReader(new InputStreamReader(dataUrl.openStream()));
+
+                    String inputLine;
+                    String lineBuffer="";
+                    boolean tableStartTrigger = false;
+                    int fieldCounter=0;
+
+                    while ((inputLine = in.readLine()) != null)
+                    {
+
+                        if (inputLine.contains("<table class=\"wikitable sortable\""))
+                        {
+                            tableStartTrigger=true;
+                        }
+
+                        if (tableStartTrigger)
+                        {
+                            if (inputLine.contains("<td") || inputLine.contains("<th"))
+                            {
+                                cellStartTrigger=true;
+                            }
+
+                            if (cellStartTrigger)
+                            {
+                                lineBuffer=lineBuffer+inputLine;
+                            }
+
+                            if (inputLine.contains("</th>") || inputLine.contains("</td>"))
+                            {
+                                rowData[fieldCounter] = removeHtmlTags(lineBuffer);
+                                fieldCounter++;
+                                lineBuffer="";
+                                cellStartTrigger=false;
+                            }
+
+                            if (inputLine.contains("</tr>") && fieldCounter>0)
+                            {
+                                dataList.add(rowData);
+                                rowData = new String[6];
+                                lineBuffer=inputLine.substring(inputLine.indexOf("</tr>"));
+                                cellStartTrigger=false;
+                                fieldCounter=0;
+                            }
+                            if(inputLine.contains("</table>"))
+                            {
+                                break;
+                            }
+                        }
+                    }
+                    in.close();
+                }
+                catch (IOException e)
+                {
+                    System.out.println(e.toString());
+                    return null;
+                }
+                return dataList;
+            }
+        };
+        Future<ArrayList<String[]>> future = executor.submit(callable);
+        executor.shutdown();
+
+        return future.get();
+    }
 }

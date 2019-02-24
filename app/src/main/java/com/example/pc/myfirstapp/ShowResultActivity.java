@@ -32,7 +32,6 @@ public class ShowResultActivity extends AppCompatActivity {
             "https://www.finanzen.net/index/mdax/werte"
     };
 
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);

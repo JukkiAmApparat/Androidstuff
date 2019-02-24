@@ -59,6 +59,7 @@ public class testActivity extends AppCompatActivity {
                 ((TextView)row.findViewById(R.id.goals_cell)).setText("Goals");
                 ((TextView)row.findViewById(R.id.diff_cell)).setText("Diff.");
                 ((TextView)row.findViewById(R.id.points_cell)).setText("Pts.");
+                ((TextView)row.findViewById(R.id.testing_cell)).setText(mc.formatStockCell("TEEEEEEEEESSSSSTTTTIIIIIIINGGGGGGGGG"));
 
                 ((TextView)row.findViewById(R.id.rank_cell)).setTypeface(null, Typeface.BOLD);
                 ((TextView)row.findViewById(R.id.club_cell)).setTypeface(null, Typeface.BOLD);
@@ -69,6 +70,7 @@ public class testActivity extends AppCompatActivity {
                 ((TextView)row.findViewById(R.id.goals_cell)).setTypeface(null, Typeface.BOLD);
                 ((TextView)row.findViewById(R.id.diff_cell)).setTypeface(null, Typeface.BOLD);
                 ((TextView)row.findViewById(R.id.points_cell)).setTypeface(null, Typeface.BOLD);
+                ((TextView)row.findViewById(R.id.testing_cell)).setTypeface(null, Typeface.BOLD);
 
                 table.addView(row);
                 int counter = 0;
@@ -86,6 +88,7 @@ public class testActivity extends AppCompatActivity {
                     ((TextView)row.findViewById(R.id.goals_cell)).setText(mc.formatStockCell(stockrow[5]));
                     ((TextView)row.findViewById(R.id.diff_cell)).setText(mc.formatStockCell(stockrow[6]));
                     ((TextView)row.findViewById(R.id.points_cell)).setText(mc.formatStockCell(stockrow[7]));
+                    ((TextView)row.findViewById(R.id.testing_cell)).setText(mc.formatStockCell("TEEEEEEEEESSSSSTTTTIIIIIIINGGGGGGGGG"));
                     table.addView(row);
                 }
                 table.requestLayout();

@@ -77,6 +77,16 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        Button wikiButton = (Button) findViewById(R.id.wikiButton);
+        wikiButton.setOnClickListener(new View.OnClickListener()
+        {
+            @Override
+            public void onClick(View v) {
+                Intent intent3 = new Intent(v.getContext(), show_wikitable.class);
+                startActivity(intent3);
+            }
+        });
+
 
         Button startButton = (Button) findViewById(R.id.StartButton);
         startButton.setOnClickListener(new View.OnClickListener() {
