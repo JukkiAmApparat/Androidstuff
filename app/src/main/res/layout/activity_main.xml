@@ -8,52 +8,26 @@
     tools:context=".MainActivity">
 
     <Button
-        android:id="@+id/StartButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginTop="118dp"
-        android:layout_marginEnd="51dp"
-        android:layout_marginRight="51dp"
-        android:text="@string/stockButtonText"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/SourceSelectionSpinner" />
-
-    <TextView
-        android:id="@+id/WebTextView"
-        android:layout_width="335dp"
-        android:layout_height="193dp"
-        android:layout_marginStart="26dp"
-        android:layout_marginLeft="26dp"
-        android:layout_marginEnd="26dp"
-        android:layout_marginRight="26dp"
-        android:layout_marginBottom="26dp"
-        android:scrollbars="vertical"
-        android:text="TextView"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toStartOf="parent" />
-
-    <Button
-        android:id="@+id/showResultButton"
+        android:id="@+id/showFinanceButton"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="50dp"
         android:layout_marginLeft="50dp"
         android:layout_marginTop="118dp"
-        android:text="Result"
+        android:text="Finanzen"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/SourceSelectionSpinner" />
 
     <Button
-        android:id="@+id/testButton"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
+        android:id="@+id/showFootballButton"
+        android:layout_width="93dp"
+        android:layout_height="47dp"
         android:layout_marginStart="50dp"
         android:layout_marginLeft="50dp"
         android:layout_marginTop="8dp"
-        android:text="Testing"
+        android:text="Football"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/showResultButton" />
+        app:layout_constraintTop_toBottomOf="@+id/showFinanceButton" />
 
     <Spinner
         android:id="@+id/SourceSelectionSpinner"
@@ -61,20 +35,18 @@
         android:layout_height="43dp"
         android:layout_marginStart="8dp"
         android:layout_marginLeft="8dp"
-        android:layout_marginTop="120dp"
+        android:layout_marginTop="11dp"
         android:layout_marginEnd="8dp"
         android:layout_marginRight="8dp"
-        android:layout_marginBottom="70dp"
-        app:layout_constraintBottom_toTopOf="@+id/StartButton"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.491"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toTopOf="parent" />
+        app:layout_constraintTop_toBottomOf="@+id/imageView" />
 
     <ImageView
         android:id="@+id/imageView"
         android:layout_width="fill_parent"
         android:layout_height="132dp"
-        android:layout_marginTop="16dp"
         android:layout_marginBottom="21dp"
         android:scaleType="fitXY"
         app:layout_constraintBottom_toTopOf="@+id/SourceSelectionSpinner"
@@ -84,15 +56,29 @@
         app:srcCompat="@drawable/shore" />
 
     <Button
-        android:id="@+id/wikiButton"
+        android:id="@+id/showWikiButton"
         android:layout_width="106dp"
         android:layout_height="47dp"
-        android:layout_marginTop="8dp"
-        android:layout_marginEnd="52dp"
-        android:layout_marginRight="52dp"
+        android:layout_marginTop="118dp"
+        android:layout_marginEnd="56dp"
+        android:layout_marginRight="56dp"
         android:text="Wiki"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/StartButton" />
+        app:layout_constraintTop_toBottomOf="@+id/SourceSelectionSpinner" />
+
+    <Button
+        android:id="@+id/showDataButton"
+        android:layout_width="335dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="Show Data"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/SourceSelectionSpinner" />
 
 
 </android.support.constraint.ConstraintLayout>

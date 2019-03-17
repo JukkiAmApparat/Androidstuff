@@ -2,6 +2,11 @@ package com.example.pc.myfirstapp;
 
 import android.text.Html;
 
+import org.jsoup.Jsoup;
+import org.jsoup.nodes.Document;
+import org.jsoup.nodes.Element;
+import org.jsoup.select.Elements;
+
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -23,6 +28,12 @@ public class MainController {
     public static HashSet<String> entrySet;
     private static MainController MainController_instance = null;
 
+    public static ArrayList<ArrayList<ArrayList<String>>> allTables;
+    public static ArrayList<ArrayList<String>> currentTable;
+    public static ArrayList<String> currentRow;
+    public static String fullPage;
+    public static Document doc;
+
     public static MainController getInstance()
     {
         if (MainController_instance == null) {
@@ -41,7 +52,7 @@ public class MainController {
 
     public String removeHtmlTags(String inputLine)
     {
-        return Html.fromHtml(inputLine).toString().trim();
+        return Html.fromHtml(inputLine).toString().replaceAll("￼","").trim();
     }
 
 
@@ -229,6 +240,7 @@ public class MainController {
                     System.out.println(e.toString());
                     return null;
                 }
+
                 return stockList;
             }
         };
@@ -307,15 +319,15 @@ public class MainController {
         return future.get();
     }
 
-    public ArrayList<String[]> readWikiData(final String webpageUrl) throws InterruptedException, ExecutionException
+    public ArrayList<ArrayList<String>> readWikiData(final String webpageUrl) throws InterruptedException, ExecutionException
     {
         ExecutorService executor = Executors.newSingleThreadExecutor();
-        Callable<ArrayList<String[]>> callable = new Callable<ArrayList<String[]>>() {
+        Callable<ArrayList<ArrayList<String>>> callable = new Callable<ArrayList<ArrayList<String>>>() {
             @Override
-            public ArrayList<String[]> call() {
+            public ArrayList<ArrayList<String>> call() {
 
-                ArrayList<String[]> dataList = new ArrayList<String[]>();
-                String[] rowData = new String[6];
+                ArrayList<ArrayList<String>> dataList = new ArrayList<ArrayList<String>>();
+                ArrayList<String> rowData = new ArrayList<String>();
                 boolean cellStartTrigger = false;
 
                 try
@@ -325,6 +337,7 @@ public class MainController {
 
                     String inputLine;
                     String lineBuffer="";
+                    String lineAddon="";
                     boolean tableStartTrigger = false;
                     int fieldCounter=0;
 
@@ -338,6 +351,12 @@ public class MainController {
 
                         if (tableStartTrigger)
                         {
+                            if (lineAddon.length()>0)
+                            {
+                                inputLine=lineAddon+inputLine;
+                                lineAddon="";
+                            }
+
                             if (inputLine.contains("<td") || inputLine.contains("<th"))
                             {
                                 cellStartTrigger=true;
@@ -350,17 +369,29 @@ public class MainController {
 
                             if (inputLine.contains("</th>") || inputLine.contains("</td>"))
                             {
-                                rowData[fieldCounter] = removeHtmlTags(lineBuffer);
+
+                                if (inputLine.contains("</th>"))
+                                {
+                                    lineAddon=lineBuffer.substring(lineBuffer.indexOf("</th>")+5);
+                                    rowData.add(removeHtmlTags(lineBuffer.substring(lineBuffer.indexOf("<th"),lineBuffer.indexOf("</th>"))));
+                                }
+                                else
+                                {
+                                    lineAddon=lineBuffer.substring(lineBuffer.indexOf("</td>")+5);
+                                    rowData.add(removeHtmlTags(lineBuffer.substring(lineBuffer.indexOf("<td"),lineBuffer.indexOf("</td>"))));
+                                }
+
                                 fieldCounter++;
-                                lineBuffer="";
                                 cellStartTrigger=false;
+                                lineBuffer="";
                             }
 
                             if (inputLine.contains("</tr>") && fieldCounter>0)
                             {
                                 dataList.add(rowData);
-                                rowData = new String[6];
-                                lineBuffer=inputLine.substring(inputLine.indexOf("</tr>"));
+                                rowData = new ArrayList<String>();
+                                lineBuffer="";
+                                lineAddon=inputLine.substring(inputLine.indexOf("</tr>")+5);
                                 cellStartTrigger=false;
                                 fieldCounter=0;
                             }
@@ -380,9 +411,94 @@ public class MainController {
                 return dataList;
             }
         };
-        Future<ArrayList<String[]>> future = executor.submit(callable);
+        Future<ArrayList<ArrayList<String>>> future = executor.submit(callable);
         executor.shutdown();
 
         return future.get();
     }
+
+    public ArrayList<ArrayList<ArrayList<String>>> readAllTables() throws InterruptedException, ExecutionException
+    {
+        ExecutorService executor = Executors.newSingleThreadExecutor();
+        Callable<ArrayList<ArrayList<ArrayList<String>>>> callable = new Callable<ArrayList<ArrayList<ArrayList<String>>>>() {
+            @Override
+            public ArrayList<ArrayList<ArrayList<String>>> call() {
+                allTables = new ArrayList<ArrayList<ArrayList<String>>>();
+                currentTable = new ArrayList<ArrayList<String>>();
+                currentRow = new ArrayList<String>();
+                fullPage = new String("");
+
+                try
+                {
+                    URL oracle = new URL("https://en.wikipedia.org/wiki/List_of_sovereign_states");
+                    BufferedReader in = new BufferedReader(new InputStreamReader(oracle.openStream(), "UTF8"));
+                    String inputLine;
+                    Element table;
+                    Elements rows;
+                    Element row;
+                    Elements cols;
+
+                    while ((inputLine = in.readLine()) != null)
+                    {
+                        if(inputLine.startsWith("<td"))
+                        {
+                            System.out.println(inputLine);
+                        }
+                        fullPage = fullPage + inputLine;
+                    }
+
+                    in.close();
+
+                    doc = Jsoup.parse(fullPage);
+
+                    if (doc.select("table").size()>0)
+                    {
+                        for (int x=0; x<doc.select("table").size(); x++)
+                        {
+                            table = doc.select("table").get(x);
+                            currentTable = new ArrayList<ArrayList<String>>();
+
+                            rows = table.select("tr");
+                            row = null;
+                            cols = null;
+
+                            for (int i=0; i<rows.size(); i++)
+                            {
+                                row = rows.get(i);
+                                currentRow = new ArrayList<String>();
+
+                                cols = row.select("td");
+
+                                if (cols.size()==0)
+                                {
+                                    continue;
+                                }
+                                else
+                                {
+                                    for (int j=0; j<cols.size(); j++)
+                                    {
+                                        currentRow.add(cols.get(j).text());
+                                    }
+                                    currentTable.add(currentRow);
+                                }
+                            }
+                            allTables.add(currentTable);
+                        }
+                    }
+                }
+                catch (IOException e)
+                {
+                    e.printStackTrace();
+                }
+                return allTables;
+
+
+            }
+        };
+        Future<ArrayList<ArrayList<ArrayList<String>>>> future = executor.submit(callable);
+        executor.shutdown();
+
+        return future.get();
+    }
+
 }

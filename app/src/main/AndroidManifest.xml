@@ -11,7 +11,9 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:supportsRtl="true"
         android:theme="@style/AppTheme">
-        <activity android:name=".show_wikitable"></activity>
+        <activity android:name=".show_multitable"></activity>
+        <activity android:name=".ShowMultiTable" />
+        <activity android:name=".show_wikitable" />
         <activity android:name=".testActivity" />
         <activity android:name=".MainActivity">
             <intent-filter>

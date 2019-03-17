@@ -16,9 +16,12 @@ import java.util.ArrayList;
 import java.util.concurrent.ExecutionException;
 
 public class show_wikitable extends AppCompatActivity {
-    public final String[] wikiSources = {"Population"};
+    public final String[] wikiSources = {"Population", "Bestsellers", "Loss Profit", "Revenue"};
     public final String[] wikiUrls = {
-            "https://en.wikipedia.org/wiki/List_of_countries_and_dependencies_by_population"};
+            "https://en.wikipedia.org/wiki/List_of_countries_and_dependencies_by_population",
+            "https://en.wikipedia.org/wiki/List_of_best-selling_books",
+            "https://en.wikipedia.org/wiki/List_of_largest_corporate_profits_and_losses",
+            "https://en.wikipedia.org/wiki/List_of_largest_companies_by_revenue"};
     private Context context = null;
 
 
@@ -38,7 +41,7 @@ public class show_wikitable extends AppCompatActivity {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
                 MainController mc = MainController.getInstance();
-                ArrayList<String[]> wikiData = null;
+                ArrayList<ArrayList<String>> wikiData = null;
                 try {
                     wikiData = mc.readWikiData(wikiUrls[position]);
                 } catch (InterruptedException e) {
@@ -55,7 +58,7 @@ public class show_wikitable extends AppCompatActivity {
                 TextView textView2;
 
 
-                for(String[] stockrow : wikiData)
+                for(ArrayList<String> stockrow : wikiData)
                 {
                     counter++;
                     row2=new TableRow(context);
