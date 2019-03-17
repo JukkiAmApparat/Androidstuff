@@ -430,8 +430,8 @@ public class MainController {
 
                 try
                 {
-                    URL oracle = new URL("https://en.wikipedia.org/wiki/List_of_sovereign_states");
-                    BufferedReader in = new BufferedReader(new InputStreamReader(oracle.openStream(), "UTF8"));
+                    URL currentURL = new URL("https://en.wikipedia.org/wiki/List_of_sovereign_states");
+                    BufferedReader in = new BufferedReader(new InputStreamReader(currentURL.openStream(), "UTF8"));
                     String inputLine;
                     Element table;
                     Elements rows;
@@ -440,15 +440,10 @@ public class MainController {
 
                     while ((inputLine = in.readLine()) != null)
                     {
-                        if(inputLine.startsWith("<td"))
-                        {
-                            System.out.println(inputLine);
-                        }
                         fullPage = fullPage + inputLine;
                     }
 
                     in.close();
-
                     doc = Jsoup.parse(fullPage);
 
                     if (doc.select("table").size()>0)
@@ -459,8 +454,6 @@ public class MainController {
                             currentTable = new ArrayList<ArrayList<String>>();
 
                             rows = table.select("tr");
-                            row = null;
-                            cols = null;
 
                             for (int i=0; i<rows.size(); i++)
                             {
@@ -491,8 +484,6 @@ public class MainController {
                     e.printStackTrace();
                 }
                 return allTables;
-
-
             }
         };
         Future<ArrayList<ArrayList<ArrayList<String>>>> future = executor.submit(callable);

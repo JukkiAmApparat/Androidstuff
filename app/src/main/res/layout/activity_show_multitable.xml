@@ -6,4 +6,88 @@
     android:layout_height="match_parent"
     tools:context=".show_multitable">
 
+<ImageView
+    android:id="@+id/multiHeaderImageView"
+    android:layout_width="fill_parent"
+    android:layout_height="121dp"
+    android:layout_marginBottom="8dp"
+    android:scaleType="fitXY"
+    app:layout_constraintEnd_toEndOf="parent"
+    app:layout_constraintStart_toStartOf="parent"
+    app:layout_constraintTop_toTopOf="parent"
+    app:srcCompat="@drawable/finance" />
+
+    <EditText
+        android:id="@+id/adressEditText"
+        android:layout_width="391dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:ems="10"
+        android:inputType="textPersonName"
+        android:text="Address"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/multiHeaderImageView" />
+
+    <Button
+        android:id="@+id/refreshDataButton"
+        android:layout_width="385dp"
+        android:layout_height="42dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        android:text="Get Data"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/adressEditText" />
+
+    <ScrollView
+        android:id="@+id/multiScrollView"
+        android:layout_width="395dp"
+        android:layout_height="362dp"
+        android:layout_marginStart="8dp"
+        android:layout_marginLeft="8dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginEnd="8dp"
+        android:layout_marginRight="8dp"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="1.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/refreshDataButton">
+
+        <HorizontalScrollView
+            android:id="@+id/multiHorizontalScrollView"
+            android:layout_height="match_parent"
+            android:layout_width="match_parent"
+            android:scrollbars="horizontal|vertical">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:orientation="vertical">
+
+                <TableLayout
+                    android:id="@+id/contentTableLayout"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:isScrollContainer="true"
+                    app:layout_constraintBottom_toBottomOf="parent"
+                    app:layout_constraintEnd_toEndOf="parent"
+                    app:layout_constraintStart_toStartOf="parent"
+                    app:layout_constraintTop_toTopOf="parent">
+
+                    <TableRow
+                        android:layout_width="match_parent"
+                        android:layout_height="match_parent" />
+
+                </TableLayout>
+            </LinearLayout>
+        </HorizontalScrollView>
+    </ScrollView>
 </android.support.constraint.ConstraintLayout>
