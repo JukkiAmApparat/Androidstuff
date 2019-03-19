@@ -417,7 +417,7 @@ public class MainController {
         return future.get();
     }
 
-    public ArrayList<ArrayList<ArrayList<String>>> readAllTables() throws InterruptedException, ExecutionException
+    public ArrayList<ArrayList<ArrayList<String>>> readAllTables(final String webpageUrl) throws InterruptedException, ExecutionException
     {
         ExecutorService executor = Executors.newSingleThreadExecutor();
         Callable<ArrayList<ArrayList<ArrayList<String>>>> callable = new Callable<ArrayList<ArrayList<ArrayList<String>>>>() {
@@ -430,10 +430,11 @@ public class MainController {
 
                 try
                 {
-                    URL currentURL = new URL("https://en.wikipedia.org/wiki/List_of_sovereign_states");
+                    URL currentURL = new URL(webpageUrl);
                     BufferedReader in = new BufferedReader(new InputStreamReader(currentURL.openStream(), "UTF8"));
                     String inputLine;
                     Element table;
+                    Elements header;
                     Elements rows;
                     Element row;
                     Elements cols;
@@ -452,6 +453,14 @@ public class MainController {
                         {
                             table = doc.select("table").get(x);
                             currentTable = new ArrayList<ArrayList<String>>();
+
+                            header = table.select("th");
+                            currentRow = new ArrayList<String>();
+                            for (int i=0; i<header.size(); i++)
+                            {
+                                currentRow.add(header.get(i).text());
+                            }
+                            currentTable.add(currentRow);
 
                             rows = table.select("tr");
 

@@ -28,7 +28,7 @@
         android:layout_marginRight="8dp"
         android:ems="10"
         android:inputType="textPersonName"
-        android:text="Address"
+        android:text="https://en.wikipedia.org/wiki/List_of_countries_by_past_and_projected_GDP_(PPP)"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/multiHeaderImageView" />
